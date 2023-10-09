@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+	font-family: 'Space Mono';
+	background-color: hsl(185, 41%, 84%);
+}
