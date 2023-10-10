@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from "react";
-import "./App.css";
+import React,{ useState } from "react";
 import Button from "./components/Button";
-import { useState } from "react";
 import dollar from "./assets/icon-dollar.svg";
 import person from "./assets/icon-person.svg";
+import ResetButton from "./components/ResetButton";
+import Result from "./components/Result";
 
 function App() {
   const [bill, setBill] = useState("");
@@ -17,9 +17,9 @@ function App() {
 
   const percents = [5, 10, 15, 25, 50];
   return (
-    <div className="App text-center pt-10">
-      <main >
-        <h1 className="font-bold tracking-[0.6rem] pt-5 md:pt-10 pb-10 text-[#00494d]">
+    <div className="w-100 h-screen flex items-center justify-center text-center">
+      <main>
+        <h1 className="font-bold tracking-[0.6rem] pb-10 text-[#00494d]">
           SPLI
           <br />
           TTER
@@ -44,7 +44,6 @@ function App() {
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
               {percents.map((percent, index) => (
-                //bg-[#00494d] text-[#00494d]
                 <Button
                   key={percent.toString()}
                   title={`${percent}%`}
@@ -91,36 +90,8 @@ function App() {
             </div>
           </div>
           <div className="bg-[#00494d] rounded-xl p-5 md:p-6 lg:p-10">
-            <div className="flex flex-row justify-between md-4 md:mb-6">
-              <div className="flex flex-col">
-                <h3 className="text-white pb-[-2] font-bold">Tip Amount</h3>
-                <small className="text-[#5e7a7d] text-left font-bold">
-                  / person
-                </small>
-              </div>
-              <div className="text-3xl text-[#26c0ab] font-bold">
-                {amount <= 0 ? "$0.00" : amount}
-              </div>
-            </div>
-            <div className="flex flex-row justify-between mt-4 md:mt-6">
-              <div className="flex flex-col">
-                <h3 className="text-white pb-[-2] font-bold">Total</h3>
-                <small className="text-[#5e7a7d] text-left font-bold">
-                  / person
-                </small>
-              </div>
-              <div className="text-3xl text-[#26c0ab] font-bold">
-                {total <= 0 ? "$0.00" : total}
-              </div>
-            </div>
-
-            <button
-              disabled={Number(people) <= 0}
-              onClick={() => reset()}
-              className="disabled:bg-[#5e7a7d] w-full rounded-lg py-2 mt-12 sm:mt-14 md:mt-20 lg:mt-28 bg-[#26c0ab] text-xl text-[#00494d] font-bold hover:bg-[#26c0abc1]"
-            >
-              RESET
-            </button>
+            <Result amount={amount} total={total} />
+            <ResetButton people={people} onClick={reset} />
           </div>
         </div>
       </main>
@@ -166,9 +137,11 @@ function App() {
     if (parseInt(people) < 1) {
       setBlurred(true);
       setError("Can't be zero");
+      return;
     } else if (isNaN(parseInt(people))) {
       setBlurred(true);
       setError("Number expected");
+      return;
     } else {
       setBlurred(false);
       setError("");
