@@ -27,19 +27,19 @@ function App() {
         <div className="w-full md:w-4/5 lg:w-3/5 grid md:grid-cols-2 gap-6 md:gap-7 lg:gap-10 mx-auto bg-white p-6 md:p-7 lg:p-10 rounded-2xl">
           <div className="">
             <label className="text-gray-400 text-base text-left pb-2 font-bold">
-              <p className="text-[#00494d] -mb-2 md:mb-0">Bill</p>
+              <p className="text-[#00494dd1] -mb-2 md:mb-0">Bill</p>
               <img src={dollar} alt="$" className="relative top-8 left-3" />
               <input
                 type="text"
                 placeholder="0"
                 className={`w-full font-bold text-[24px] p-1 bg-[#f4fafa] border-2 border-transparent ${isNaN(
                   isNaN(parseFloat(bill)) ? "border-red-500" : ""
-                )} text-[#00494d] text-right hover:border-2 hover:border-[#26c0ab] rounded-md placeholder:text-[#00494d]`}
+                )} text-[#00494d] text-right hover:border-2 hover:border-[#26c0ab] rounded-md placeholder:text-gray-400`}
                 value={bill}
                 onChange={(e) => setBill(e.target.value)}
               />
             </label>
-            <h3 className="text-base text-[#00494d] text-left pt-6 pb-2 font-bold">
+            <h3 className="text-base text-[#00494dd1] text-left mt-8 mb-4 font-bold">
               Select Tip %
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
@@ -59,9 +59,9 @@ function App() {
                 onChange={(e) => setTip(parseFloat(e.target.value))}
               />
             </div>
-            <div className="pt-6 pb-2">
+            <div className="mt-8 pb-2">
               <div className="flex justify-between -mb-2 md:mb-0">
-                <h3 className="text-left text-[#00494d] font-bold">
+                <h3 className="text-left text-[#00494dd1] font-bold">
                   Number of People
                 </h3>
 
@@ -79,7 +79,7 @@ function App() {
                   inputMode="decimal"
                   className={`w-full font-bold text-[24px] p-1 bg-[#f4fafa] text-[#00494d] text-right border-2 hover:border-[#26c0ab] ${
                     blurred ? "border-red-500" : "border-transparent"
-                  } rounded-md placeholder:text-[#00494d]`}
+                  } rounded-md placeholder:text-gray-400`}
                   value={people}
                   placeholder="0"
                   type="text"
