@@ -1,11 +1,24 @@
-import React,{ useState } from "react";
+import React, { useState } from "react";
 import Button from "./components/Button";
 import dollar from "./assets/icon-dollar.svg";
 import person from "./assets/icon-person.svg";
 import ResetButton from "./components/ResetButton";
 import Result from "./components/Result";
+// import { useAppLogic } from "./utils/useAppLogic";
 
 function App() {
+  // const {
+  //   reset,
+  //   onClick,
+  //   handleBlur,
+  //   total,
+  //   amount,
+  //   blurred,
+  //   active,
+  //   error,
+  //   billError,
+  // } = useAppLogic();
+
   const [bill, setBill] = useState("");
   const [tip, setTip] = useState(0);
   const [people, setPeople] = useState("");
@@ -14,6 +27,8 @@ function App() {
   const [blurred, setBlurred] = useState(false);
   const [active, setActive] = useState(null);
   const [error, setError] = useState("");
+  const [billError, setBillError] = useState("");
+  const [tipError, setTipError] = useState("");
 
   const percents = [5, 10, 15, 25, 50];
   return (
@@ -26,44 +41,62 @@ function App() {
         </h1>
         <div className="w-full md:w-4/5 lg:w-3/5 grid md:grid-cols-2 gap-6 md:gap-7 lg:gap-10 mx-auto bg-white p-6 md:p-7 lg:p-10 rounded-2xl">
           <div className="">
+            <div className="flex justify-between -mb-2 md:mb-0">
+              <h3 className="text-left text-[#00494dd1] font-bold">Bill</h3>
+              <small
+                className={`${
+                  blurred ? "block font-bold text-red-500" : "hidden"
+                }`}
+              >
+                {billError}
+              </small>
+            </div>
             <label className="text-gray-400 text-base text-left pb-2 font-bold">
-              <p className="text-[#00494dd1] -mb-2 md:mb-0">Bill</p>
               <img src={dollar} alt="$" className="relative top-8 left-3" />
               <input
                 type="text"
                 placeholder="0"
-                className={`w-full font-bold text-[24px] p-1 bg-[#f4fafa] border-2 border-transparent ${isNaN(
-                  isNaN(parseFloat(bill)) ? "border-red-500" : ""
-                )} text-[#00494d] text-right hover:border-2 hover:border-[#26c0ab] rounded-md placeholder:text-gray-400`}
+                className={`w-full font-bold text-[24px] p-1 bg-[#f4fafa] border-2 border-transparent ${
+                  blurred && isNaN(parseFloat(bill)) ? "border-red-500" : ""
+                } text-[#00494d] text-right hover:border-2 hover:border-[#26c0ab] rounded-md placeholder:text-gray-400`}
                 value={bill}
                 onChange={(e) => setBill(e.target.value)}
+                onBlur={handleBlur}
               />
             </label>
-            <h3 className="text-base text-[#00494dd1] text-left mt-8 mb-4 font-bold">
+            <h2 className="text-base text-[#00494dd1] text-left mt-8 mb-4 font-bold">
               Select Tip %
-            </h3>
+            </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
               {percents.map((percent, index) => (
                 <Button
                   key={percent.toString()}
                   title={`${percent}%`}
                   active={active == index}
-                  onClick={() => onClick(percent, index)}
+                  onClick={() => {
+                    onClick(percent, index);
+                    setTipError(false);
+                  }}
                 />
               ))}
               <input
                 type="text"
                 inputMode="decimal"
-                className="text-lg rounded-md font-bold text-[#00494d] bg-[#f4fafa] text-center px-1 border-2 border-transparent hover:border-2 hover:border-[#26c0ab] placeholder:text-[#5e7a7d]"
+                className={`text-lg rounded-md font-bold text-[#00494d] bg-[#f4fafa] text-center px-1 border-2  ${
+                  tipError ? "border-red-500" : "border-transparent"
+                } hover:border-2 hover:border-[#26c0ab] placeholder:text-[#5e7a7d]`}
                 placeholder="Custom"
                 onChange={(e) => setTip(parseFloat(e.target.value))}
+                onBlur={() =>
+                  isNaN(tip) || tip < 1 ? setTipError(true) : setTipError(false)
+                }
               />
             </div>
             <div className="mt-8 pb-2">
               <div className="flex justify-between -mb-2 md:mb-0">
-                <h3 className="text-left text-[#00494dd1] font-bold">
+                <h2 className="text-left text-[#00494dd1] font-bold">
                   Number of People
-                </h3>
+                </h2>
 
                 <small
                   className={`${
@@ -134,6 +167,15 @@ function App() {
   }
 
   function handleBlur() {
+    if (isNaN(parseFloat(bill))) {
+      setBlurred(true);
+      setBillError("Number expected!");
+      return;
+    } else if (parseFloat(bill) <= 0) {
+      setBlurred(true);
+      setBillError("Can not be zero!");
+      return;
+    }
     if (parseInt(people) < 1) {
       setBlurred(true);
       setError("Can't be zero");
@@ -146,6 +188,7 @@ function App() {
       setBlurred(false);
       setError("");
     }
+
     calculateTip();
   }
 }
